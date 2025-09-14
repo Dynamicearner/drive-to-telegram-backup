@@ -71,22 +71,24 @@ pip install -r requirements.txt
    - Note down your `api_id` and `api_hash`
 
 2. Get your Channel ID:
-   - Add your bot to the channel as an admin
+   - Add your user account to the channel as an admin
    - Forward a message from the channel to [@userinfobot](https://t.me/userinfobot)
    - The channel ID will be shown (it starts with -100)
 
+**Note:** This script uses Telegram MTProto library for user account login, not a bot. You'll need to authenticate with your personal Telegram account.
+
 ### 5. Environment Configuration
 
-1. Copy the `.env` file and update the values:
+1. Create your `.env` file (`.env.local` is just an example):
 
 ```bash
-cp .env .env.local
+cp .env.local .env
 ```
 
-2. Edit `.env.local` with your actual values:
+2. Edit `.env` with your actual values:
 
 ```env
-# Telegram Bot Configuration
+# Telegram Pyrogram User account Configuration
 API_ID=your_api_id_here
 API_HASH=your_api_hash_here
 CHANNEL_ID=your_channel_id_here
@@ -98,44 +100,47 @@ SERVICE_ACCOUNT_FILE=service_account.json
 MAX_SIZE=1992294400
 ```
 
+**Important:** The actual environment file should be named `.env`, not `.env.local`. The `.env.local` file is just an example template.
+
 
 ## Usage
 
 1. Make sure your `service_account.json` file is in the project root
-2. Update your `.env.local` file with correct values
-3. Run the bot:
+2. Update your `.env` file with correct values
+3. Run the Script:
 
 ```bash
-python drive_to_telegram.py
+python3 drive_to_telegram.py
 ```
 
-The bot will:
+The script will:
 - Scan your Google Drive (My Drive + Shared with Me)
 - Download each file
-- Upload to your Telegram channel
+- Upload to your Telegram channel using your user account
 - Split large files automatically
 - Clean up temporary files
+
+**Note:** On first run, you'll be prompted to authenticate with your Telegram account using your phone number and verification code.
 
 ## File Structure
 
 ```
 googledrivebotbackup/
-├── drive_to_telegram.py      # Main bot script
+├── drive_to_telegram.py      # Main script
 ├── service_account.json      # Google service account credentials (not in git)
-├── .env                      # Environment variables template
-├── .env.local               # Your actual environment variables (not in git)
-├── .gitignore               # Git ignore file
+├── .env                     # Your actual environment variables (not in git)
+├── .env.local               # Example environment file template
 ├── requirements.txt         # Python dependencies
 └── README.md               # This file
 ```
 
 ## Important Notes
 
-- ⚠️ **Never commit your `service_account.json` or `.env.local` files to git**
-- 📁 The bot processes all files in your Google Drive and shared folders
+- 📁 The script processes all files in your Google Drive and shared folders
 - 🔄 Large files (>1.9GB) are automatically split into parts
 - 📱 Make sure your Telegram channel has enough storage space
 - 🔐 Keep your API credentials secure
+- 👤 This uses your personal Telegram account (not a bot) via MTProto library
 
 ## Troubleshooting
 
@@ -146,16 +151,21 @@ googledrivebotbackup/
    - Verify the service account has access to your Google Drive
 
 2. **"Channel not found" error:**
-   - Check your `CHANNEL_ID` in the `.env.local` file
-   - Make sure the bot is added to the channel as an admin
+   - Check your `CHANNEL_ID` in the `.env` file
+   - Make sure your user account is added to the channel as an admin
 
 3. **"API credentials invalid" error:**
-   - Verify your `API_ID` and `API_HASH` in the `.env.local` file
+   - Verify your `API_ID` and `API_HASH` in the `.env` file
    - Make sure you're using the correct credentials from my.telegram.org
 
 4. **"File too large" error:**
-   - The bot automatically handles large files by splitting them
+   - The script automatically handles large files by splitting them
    - If you still get this error, check your `MAX_SIZE` setting
+
+5. **"Authentication failed" error:**
+   - Make sure you're using your personal Telegram account credentials
+   - Check that your phone number and verification code are entered correctly
+   - Ensure your account has access to the target channel
 
 ## Contributing
 
@@ -171,7 +181,4 @@ This project is open source and available under the [MIT License](LICENSE).
 
 ## Disclaimer
 
-This bot is for personal use only. Make sure you have the right to download and share the files you're processing. The authors are not responsible for any misuse of this software.
-
-
-
+This script is for personal use only. Make sure you have the right to download and share the files you're processing. The authors are not responsible for any misuse of this software.
